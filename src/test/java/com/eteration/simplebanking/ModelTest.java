@@ -23,7 +23,7 @@ public class ModelTest {
 	}
 
 	@Test
-	public void testDepositIntoBankAccount() {
+	public void testDepositIntoBankAccount()  throws InsufficientBalanceException {
 		Account account = new Account("Demet Demircan", "9834");
 		account.deposit(100);
 		assertTrue(account.getBalance() == 100);

@@ -1,15 +1,22 @@
 package com.eteration.simplebanking.model;
 
 
-import lombok.Data;
+import com.eteration.simplebanking.base.model.BaseEntity;
+import com.eteration.simplebanking.exception.InsufficientBalanceException;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-@Data
+
 @Entity
 @Table(name = "ACCOUNT")
-public class Account {
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class Account extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +31,42 @@ public class Account {
     @Column(name = "BALANCE")
     private double balance;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transaction> transactions;
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Transaction.class)
+    private List<Transaction> transactions = new ArrayList<>();
+
+    public Account(String owner, String accountNumber) {
+        this.owner = owner;
+        this.accountNumber = accountNumber;
+    }
+
+    public void deposit(double amount) throws InsufficientBalanceException {
+        if (amount < 0) {
+            throw new InsufficientBalanceException("Deposit amount cannot be less than zero");
+        }
+
+        balance += amount;
+
+    }
+
+    public void withdraw(double amount) throws InsufficientBalanceException {
+        if (amount < 0)
+            throw new InsufficientBalanceException("Withdrawal amount cannot be less than zero");
+        if (amount > balance)
+            throw new InsufficientBalanceException("Insufficient balance");
+
+        balance -= amount;
+    }
+
+    public void post(Transaction transaction) throws InsufficientBalanceException {
+        if (transaction instanceof DepositTransaction) {
+            DepositTransaction depositTransaction = (DepositTransaction) transaction;
+            deposit(depositTransaction.getAmount());
+            transactions.add(depositTransaction);
+        } else if (transaction instanceof WithdrawalTransaction) {
+            WithdrawalTransaction withdrawalTransaction = (WithdrawalTransaction) transaction;
+            withdraw(withdrawalTransaction.getAmount());
+            transactions.add(withdrawalTransaction);
+        }
+    }
 
 }

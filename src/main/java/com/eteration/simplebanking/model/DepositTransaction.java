@@ -1,6 +1,20 @@
 package com.eteration.simplebanking.model;
 
 
-// This class is a place holder you can change the complete implementation
-public class DepositTransaction  {
+import lombok.Data;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("DepositTransaction")
+public class DepositTransaction extends Transaction {
+
+    public DepositTransaction(double amount) {
+        super(amount);
+    }
+
+    public DepositTransaction() {
+
+    }
 }
