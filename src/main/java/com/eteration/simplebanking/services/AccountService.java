@@ -2,14 +2,18 @@ package com.eteration.simplebanking.services;
 
 
 import com.eteration.simplebanking.converter.AccountConverter;
+import com.eteration.simplebanking.converter.TransactionConverter;
 import com.eteration.simplebanking.dto.AccountDto;
 import com.eteration.simplebanking.dto.AccountSaveRequestDto;
+import com.eteration.simplebanking.dto.TransactionDto;
 import com.eteration.simplebanking.model.Account;
 import com.eteration.simplebanking.services.entityservice.AccountEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 // This class is a place holder you can change the complete implementation
 @Service
@@ -18,10 +22,14 @@ public class AccountService {
 
     private final AccountEntityService accountEntityService;
     private final AccountConverter accountConverter;
+    private final TransactionService transactionService;
 
     public AccountDto findAccount(String accountNumber) {
         Account account = accountEntityService.getAccountByAccountNumber(accountNumber);
         AccountDto accountDto = accountConverter.toDto(account);
+
+        List<TransactionDto> transactionByAccountAccountNumber = transactionService.findTransactionByAccountAccountNumber(accountNumber);
+        accountDto.setTransactions(transactionByAccountAccountNumber);
 
         return accountDto;
     }

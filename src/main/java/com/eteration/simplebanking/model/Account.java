@@ -31,7 +31,10 @@ public class Account extends BaseEntity {
     @Column(name = "BALANCE")
     private double balance;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Transaction.class)
+    @OneToMany(mappedBy = "account",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            targetEntity = Transaction.class)
     private List<Transaction> transactions = new ArrayList<>();
 
     public Account(String owner, String accountNumber) {
@@ -45,7 +48,6 @@ public class Account extends BaseEntity {
         }
 
         balance += amount;
-
     }
 
     public void withdraw(double amount) throws InsufficientBalanceException {

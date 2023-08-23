@@ -17,5 +17,5 @@ public class AccountDto {
     private double balance;
     private Date createDate;
 
-    private List<Transaction> transactions;
+    private List<TransactionDto> transactions;
 }

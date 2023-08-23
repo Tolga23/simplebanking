@@ -6,6 +6,8 @@ package com.eteration.simplebanking.controller;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Random;
 import java.util.UUID;
@@ -13,6 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@Component
 public class TransactionStatus {
     private String status;
     private String approvalCode;
@@ -23,7 +26,7 @@ public class TransactionStatus {
     }
 
 
-    private String getApprovalCode(){
+    public String getApprovalCode(){
         String randomUuid = UUID.randomUUID().toString();
         String code = randomUuid.replace("-", "");
         StringBuilder formattedCode = new StringBuilder(code);
