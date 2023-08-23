@@ -2,7 +2,6 @@ package com.eteration.simplebanking.controller;
 
 import com.eteration.simplebanking.dto.AccountDto;
 import com.eteration.simplebanking.dto.AccountSaveRequestDto;
-import com.eteration.simplebanking.model.Account;
 import com.eteration.simplebanking.model.DepositTransaction;
 import com.eteration.simplebanking.model.WithdrawalTransaction;
 import com.eteration.simplebanking.services.AccountService;
@@ -18,6 +17,7 @@ public class AccountController {
 
     private final AccountService accountService;
     private final TransactionService transactionService;
+
     @GetMapping("{accountNumber}")
     public ResponseEntity getAccount(@PathVariable String accountNumber) {
 
@@ -27,7 +27,7 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity createUser(@RequestBody AccountSaveRequestDto accountSaveRequestDto){
+    public ResponseEntity createUser(@RequestBody AccountSaveRequestDto accountSaveRequestDto) {
         AccountDto account = accountService.createUser(accountSaveRequestDto);
 
         return ResponseEntity.ok(account);
@@ -35,16 +35,16 @@ public class AccountController {
 
     @PostMapping("/credit/{accountNumber}")
     public ResponseEntity credit(@PathVariable String accountNumber, @RequestBody DepositTransaction depositTransaction) {
-        transactionService.credit(accountNumber,depositTransaction);
+        transactionService.credit(accountNumber, depositTransaction);
 
-        return ResponseEntity.ok("Deposit Successful");
+        return ResponseEntity.ok(new TransactionStatus("Deposit Successful").toString());
     }
 
     @PostMapping("/debit/{accountNumber}")
     public ResponseEntity debit(@PathVariable String accountNumber, @RequestBody WithdrawalTransaction transaction) {
-        transactionService.debit(accountNumber,transaction);
+        transactionService.debit(accountNumber, transaction);
 
-        return ResponseEntity.ok("Withdraw Successful");
+        return ResponseEntity.ok(new TransactionStatus("Withdraw Successful").toString());
 
-	}
+    }
 }

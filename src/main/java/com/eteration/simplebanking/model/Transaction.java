@@ -35,5 +35,14 @@ public abstract class Transaction extends BaseEntity {
         this.amount = amount;
     }
 
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", date=" + date +
+                ", amount=" + amount +
+                ", account=" + account +
+                '}';
+    }
 }
 
