@@ -1,11 +1,13 @@
 package com.eteration.simplebanking.services;
 
 
+import com.eteration.simplebanking.base.CustomErrorMessages;
 import com.eteration.simplebanking.converter.AccountConverter;
 import com.eteration.simplebanking.converter.TransactionConverter;
 import com.eteration.simplebanking.dto.AccountDto;
 import com.eteration.simplebanking.dto.AccountSaveRequestDto;
 import com.eteration.simplebanking.dto.TransactionDto;
+import com.eteration.simplebanking.exception.AccountNotFoundException;
 import com.eteration.simplebanking.model.Account;
 import com.eteration.simplebanking.services.entityservice.AccountEntityService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,8 @@ public class AccountService {
 
     public AccountDto findAccount(String accountNumber) {
         Account account = accountEntityService.getAccountByAccountNumber(accountNumber);
+        validateAccount(account);
+
         AccountDto accountDto = accountConverter.toDto(account);
 
         List<TransactionDto> transactionByAccountAccountNumber = transactionService.findTransactionByAccountAccountNumber(accountNumber);
@@ -45,6 +49,12 @@ public class AccountService {
         AccountDto accountDto = accountConverter.toDto(account);
 
         return accountDto;
+    }
+
+    private void validateAccount(Account account) {
+        if (account == null) {
+            throw new AccountNotFoundException(CustomErrorMessages.ACCOUNT_NOT_FOUND);
+        }
     }
 
     private String getAccountNumber() {

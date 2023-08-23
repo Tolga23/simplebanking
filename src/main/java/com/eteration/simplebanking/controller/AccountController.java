@@ -3,8 +3,10 @@ package com.eteration.simplebanking.controller;
 import com.eteration.simplebanking.base.dto.RestResponse;
 import com.eteration.simplebanking.dto.AccountDto;
 import com.eteration.simplebanking.dto.AccountSaveRequestDto;
+import com.eteration.simplebanking.dto.PhoneBillPaymentDto;
 import com.eteration.simplebanking.dto.TransactionDto;
 import com.eteration.simplebanking.model.DepositTransaction;
+import com.eteration.simplebanking.model.PhoneBillPaymentTransaction;
 import com.eteration.simplebanking.model.WithdrawalTransaction;
 import com.eteration.simplebanking.services.AccountService;
 import com.eteration.simplebanking.services.TransactionService;
@@ -49,6 +51,14 @@ public class AccountController {
 
         return ResponseEntity.ok(new TransactionStatus("Withdraw Successful").toString());
     }
+
+    @PostMapping("/phoneBill/{accountNumber}")
+    public ResponseEntity phoneBillPayment(@PathVariable String accountNumber, @RequestBody PhoneBillPaymentDto phoneBillPaymentDto) {
+        transactionService.phoneBillPayment(accountNumber, phoneBillPaymentDto);
+
+        return ResponseEntity.ok(new TransactionStatus("Phone Bill Payment Successful").toString());
+    }
+
 
     @GetMapping("/test/{accountNumber}")
     public ResponseEntity findAllTransactionByAccountNumber(@PathVariable String accountNumber) {

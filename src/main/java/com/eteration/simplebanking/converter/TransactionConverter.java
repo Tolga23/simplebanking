@@ -2,7 +2,9 @@ package com.eteration.simplebanking.converter;
 
 import com.eteration.simplebanking.base.converter.BaseConverter;
 import com.eteration.simplebanking.controller.TransactionStatus;
+import com.eteration.simplebanking.dto.PhoneBillPaymentDto;
 import com.eteration.simplebanking.dto.TransactionDto;
+import com.eteration.simplebanking.model.PhoneBillPaymentTransaction;
 import com.eteration.simplebanking.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -42,5 +44,14 @@ public class TransactionConverter implements BaseConverter<Transaction, Transact
         List<TransactionDto> transactionDtoList = transactionList.stream().map(transaction -> toDto(transaction)).collect(Collectors.toList());
 
         return transactionDtoList;
+    }
+
+    public PhoneBillPaymentTransaction convertToPhoneBillPaymentTransaction(PhoneBillPaymentDto phoneBillPaymentDto) {
+        PhoneBillPaymentTransaction phoneBillPaymentTransaction = new PhoneBillPaymentTransaction();
+        phoneBillPaymentTransaction.setPayee(phoneBillPaymentDto.getPayee());
+        phoneBillPaymentTransaction.setPhoneNumber(phoneBillPaymentDto.getPhoneNumber());
+        phoneBillPaymentTransaction.setAmount(phoneBillPaymentDto.getAmount());
+
+        return phoneBillPaymentTransaction;
     }
 }

@@ -8,7 +8,6 @@ import java.util.Date;
 
 @Entity
 @Table(name = "TRANSACTION")
-@NoArgsConstructor
 @Getter
 @Setter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -26,13 +25,16 @@ public abstract class Transaction extends BaseEntity {
     @Column(name = "AMOUNT")
     private double amount;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ACCOUNT_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_TRANSACTION_ACCOUNT"))
     private Account account;
 
     public Transaction(double amount) {
         this.date = new Date();
         this.amount = amount;
+    }
+
+    public Transaction() {
     }
 
     @Override
