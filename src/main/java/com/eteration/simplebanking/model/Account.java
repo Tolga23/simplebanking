@@ -1,12 +1,9 @@
 package com.eteration.simplebanking.model;
 
 
-import com.eteration.simplebanking.base.CustomErrorMessages;
 import com.eteration.simplebanking.base.model.BaseEntity;
-import com.eteration.simplebanking.exception.InsufficientBalanceException;
 import lombok.*;
 
-import javax.management.InstanceNotFoundException;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,31 +41,22 @@ public class Account extends BaseEntity {
         this.accountNumber = accountNumber;
     }
 
-    public void deposit(double amount) {
-        if (amount < 0) {
-            throw new InsufficientBalanceException(CustomErrorMessages.INSUFFICIENT_BALANCE);
-        }
-
+    public double deposit(double amount) {
+        // amount control is done in the service layer
         balance += amount;
+
+        return balance;
     }
 
-    public void withdraw(double amount) {
-        if (amount > balance || amount < 0)
-            throw new InsufficientBalanceException(CustomErrorMessages.INSUFFICIENT_BALANCE);
-
+    public double withdraw(double amount) {
+        // amount control is done in the service layer
         balance -= amount;
+
+        return balance;
     }
 
     public void post(Transaction transaction) {
-        if (transaction instanceof DepositTransaction) {
-            DepositTransaction depositTransaction = (DepositTransaction) transaction;
-            deposit(depositTransaction.getAmount());
-            transactions.add(depositTransaction);
-        } else if (transaction instanceof WithdrawalTransaction) {
-            WithdrawalTransaction withdrawalTransaction = (WithdrawalTransaction) transaction;
-            withdraw(withdrawalTransaction.getAmount());
-            transactions.add(withdrawalTransaction);
-        }
+        transaction.execute(this);
     }
 
 }

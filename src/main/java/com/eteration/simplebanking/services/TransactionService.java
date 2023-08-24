@@ -5,7 +5,9 @@ import com.eteration.simplebanking.converter.TransactionConverter;
 import com.eteration.simplebanking.dto.PhoneBillPaymentDto;
 import com.eteration.simplebanking.dto.TransactionDto;
 import com.eteration.simplebanking.exception.InsufficientBalanceException;
-import com.eteration.simplebanking.model.*;
+import com.eteration.simplebanking.model.Account;
+import com.eteration.simplebanking.model.PhoneBillPaymentTransaction;
+import com.eteration.simplebanking.model.Transaction;
 import com.eteration.simplebanking.services.entityservice.AccountEntityService;
 import com.eteration.simplebanking.services.entityservice.TransactionEntityService;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +28,8 @@ public class TransactionService {
         validateDepositAmount(amount);
 
         Account account = accountService.getAccountByAccountNumber(accountNumber);
-        double accountBalance = account.getBalance();
 
-        double currentBalance = depositOperation(accountBalance, amount);
+        double currentBalance = account.deposit(amount);
 
         updateAccountDetails(transaction, account, currentBalance);
 
@@ -44,7 +45,7 @@ public class TransactionService {
 
         validateAccountBalance(amount, accountBalance);
 
-        double currentBalance = withdrawOperation(accountBalance, amount);
+        double currentBalance = account.withdraw(amount);
 
         updateAccountDetails(transaction, account, currentBalance);
 
@@ -65,10 +66,6 @@ public class TransactionService {
         account.setBalance(currentBalance);
     }
 
-    private double withdrawOperation(double accountBalance, double amount) {
-        double currentBalance = accountBalance - amount;
-        return currentBalance;
-    }
 
     private void validateDepositAmount(double amount) {
         if (amount <= 0) {
@@ -86,11 +83,7 @@ public class TransactionService {
         transaction.setAccount(account);
         transaction.setDate(new Date());
     }
-
-    private double depositOperation(double accountBalance, double amount) {
-        return accountBalance + amount;
-    }
-
+    
     public List<TransactionDto> findTransactionByAccountAccountNumber(String accountNumber) {
         List<Transaction> transactions = transactionEntityService.findTransactionByAccountAccountNumber(accountNumber);
 

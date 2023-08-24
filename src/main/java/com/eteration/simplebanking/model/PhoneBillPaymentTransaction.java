@@ -23,4 +23,10 @@ public class PhoneBillPaymentTransaction extends Transaction {
         this.payee = payee;
         this.phoneNumber = phoneNumber;
     }
+
+    @Override
+    public void execute(Account account) {
+        double amount = getAmount();
+        account.withdraw(amount);
+    }
 }

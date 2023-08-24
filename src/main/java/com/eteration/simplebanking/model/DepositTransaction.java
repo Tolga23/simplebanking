@@ -1,8 +1,6 @@
 package com.eteration.simplebanking.model;
 
 
-import lombok.Data;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -16,5 +14,11 @@ public class DepositTransaction extends Transaction {
 
     public DepositTransaction() {
 
+    }
+
+    @Override
+    public void execute(Account account) {
+        double amount = getAmount();
+        account.deposit(amount);
     }
 }

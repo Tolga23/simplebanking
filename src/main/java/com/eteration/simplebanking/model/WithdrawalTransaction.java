@@ -7,12 +7,18 @@ import javax.persistence.Entity;
 @DiscriminatorValue("WithdrawTransaction")
 public class WithdrawalTransaction extends Transaction {
 
-    public WithdrawalTransaction(double amount){
+    public WithdrawalTransaction(double amount) {
         super(amount);
     }
 
     public WithdrawalTransaction() {
 
+    }
+
+    @Override
+    public void execute(Account account) {
+        double amount = getAmount();
+        account.withdraw(amount);
     }
 }
 

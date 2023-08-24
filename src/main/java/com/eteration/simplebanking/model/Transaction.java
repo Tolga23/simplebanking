@@ -1,7 +1,8 @@
 package com.eteration.simplebanking.model;
 
 import com.eteration.simplebanking.base.model.BaseEntity;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -46,5 +47,7 @@ public abstract class Transaction extends BaseEntity {
                 ", account=" + account +
                 '}';
     }
+
+    public abstract void execute(Account account);
 }
 
