@@ -19,6 +19,7 @@ public class DepositTransaction extends Transaction {
     @Override
     public void execute(Account account) {
         double amount = getAmount();
-        account.deposit(amount);
+        double currentBalance = account.deposit(amount);
+        account.setBalance(currentBalance);
     }
 }

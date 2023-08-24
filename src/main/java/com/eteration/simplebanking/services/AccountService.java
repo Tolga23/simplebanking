@@ -12,6 +12,7 @@ import com.eteration.simplebanking.model.Account;
 import com.eteration.simplebanking.services.entityservice.AccountEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Random;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 // This class is a place holder you can change the complete implementation
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AccountService {
 
     private final AccountEntityService accountEntityService;

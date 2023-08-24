@@ -57,6 +57,7 @@ public class Account extends BaseEntity {
 
     public void post(Transaction transaction) {
         transaction.execute(this);
+        transactions.add(transaction);
     }
 
 }

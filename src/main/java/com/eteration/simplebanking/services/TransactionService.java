@@ -12,12 +12,14 @@ import com.eteration.simplebanking.services.entityservice.AccountEntityService;
 import com.eteration.simplebanking.services.entityservice.TransactionEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TransactionService {
     private final AccountEntityService accountService;
     private final TransactionEntityService transactionEntityService;
@@ -29,9 +31,7 @@ public class TransactionService {
 
         Account account = accountService.getAccountByAccountNumber(accountNumber);
 
-        double currentBalance = account.deposit(amount);
-
-        updateAccountDetails(transaction, account, currentBalance);
+        account.post(transaction);
 
         updateTransactionDetails(transaction, account);
 
@@ -45,9 +45,7 @@ public class TransactionService {
 
         validateAccountBalance(amount, accountBalance);
 
-        double currentBalance = account.withdraw(amount);
-
-        updateAccountDetails(transaction, account, currentBalance);
+        account.post(transaction);
 
         updateTransactionDetails(transaction, account);
 
@@ -59,11 +57,6 @@ public class TransactionService {
         PhoneBillPaymentTransaction phoneBillPaymentTransaction = transactionConverter.convertToPhoneBillPaymentTransaction(phoneBillPaymentDto);
 
         debit(accountNumber, phoneBillPaymentTransaction);
-    }
-
-    private void updateAccountDetails(Transaction transaction, Account account, double currentBalance) {
-        account.getTransactions().add(transaction);
-        account.setBalance(currentBalance);
     }
 
 
@@ -83,7 +76,7 @@ public class TransactionService {
         transaction.setAccount(account);
         transaction.setDate(new Date());
     }
-    
+
     public List<TransactionDto> findTransactionByAccountAccountNumber(String accountNumber) {
         List<Transaction> transactions = transactionEntityService.findTransactionByAccountAccountNumber(accountNumber);
 

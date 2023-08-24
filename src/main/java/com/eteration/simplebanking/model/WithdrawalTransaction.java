@@ -18,7 +18,8 @@ public class WithdrawalTransaction extends Transaction {
     @Override
     public void execute(Account account) {
         double amount = getAmount();
-        account.withdraw(amount);
+        double currentBalance = account.withdraw(amount);
+        account.setBalance(currentBalance);
     }
 }
 
